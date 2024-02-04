@@ -1,18 +1,30 @@
 import express from "express";
 import passport from "passport";
-import Saml2js from "saml2-js";
 
 const router = express.Router();
 
+router.get(
+  "/login",
+  passport.authenticate("saml", {
+    successRedirect: "/",
+    failureRedirect: "/login-fail",
+  })
+);
+
 router.post(
   "/login/sso/callback",
-  passport.authenticate("saml", { failureRedirect: "/", failureFlash: true }),
-  (req, res, next) => {
-    const samlResponse = req.body.SAMLResponse;
-    // const parser = new Sa(samlResponse);
-    console.log(samlResponse);
-    next();
+  // passport.authenticate("saml", {
+  //   successRedirect: "/",
+  //   failureRedirect: "/login-fail",
+  // }),
+  function (req, res) {
+    console.log(req);
+    res.redirect("/user/home");
   }
 );
+
+router.get("/home", (req, res) => {
+  res.send("Logged in");
+});
 
 export default router;
