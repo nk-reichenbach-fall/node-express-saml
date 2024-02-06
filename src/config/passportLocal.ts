@@ -25,6 +25,13 @@ export const checkAuthenticated = (
   res.redirect("/login");
 };
 
+export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/dashboard");
+  }
+  next();
+};
+
 // This adds req.session.passport.user.{...userObj}
 passport.serializeUser((userObj, done: Function) => {
   done(null, userObj);

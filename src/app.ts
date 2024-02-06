@@ -2,7 +2,11 @@ import express, { NextFunction, Request } from "express";
 import helmet from "helmet";
 import session from "express-session";
 
-import passport, { authUser, checkAuthenticated } from "./config/passportLocal";
+import passport, {
+  authUser,
+  checkAuthenticated,
+  isLoggedIn,
+} from "./config/passportLocal";
 
 import { Strategy as LocalStrategy } from "passport-local";
 
@@ -29,7 +33,11 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(authUser));
 
-app.get("/login", (req, res) => {
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+app.get("/login", isLoggedIn, (req, res) => {
   res.render("login.ejs");
 });
 
@@ -45,7 +53,7 @@ app.get("/dashboard", checkAuthenticated, (req: Request, res) => {
   res.render("dashboard.ejs", { name: req.user?.name });
 });
 
-app.delete("/logout", (req: Request, res, next: NextFunction) => {
+app.get("/logout", (req: Request, res, next: NextFunction) => {
   req.logOut((err) => {
     if (err) {
       return next();
