@@ -11,7 +11,7 @@ import passport, {
 import { Strategy as LocalStrategy } from "passport-local";
 
 import UserTable from "./db/user";
-UserTable.createUserTable().catch(console.log);
+UserTable.createUserTable().then(console.log).catch(console.log);
 
 // import passport from "./config/saml-auth";
 // import router from "./routes";

@@ -9,9 +9,9 @@ dotenv.config();
  * PGDATABASE
  * PGPORT
  */
-const client = new Client();
 
 async function execute(sql: string) {
+  const client = new Client();
   await client.connect();
   const results = await client.query(sql);
   await client.end();

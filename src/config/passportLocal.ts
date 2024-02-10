@@ -1,10 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
+import UserTable from "../db/user";
 
 // Middleware to authenticate user against db and return authenticatedUser to serializeUser function
-export const authUser = (user: string, password: string, done: Function) => {
+export const authUser = async (
+  user: string,
+  password: string,
+  done: Function
+) => {
   // TODO: Check the username and password against a DB.
-  if (user === "nk") {
+  const userDetails = await UserTable.getUser(user);
+
+  if (userDetails.rows.length) {
+    console.log(userDetails);
+  } else {
     return done(null, false);
   }
 
