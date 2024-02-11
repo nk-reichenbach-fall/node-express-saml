@@ -44,6 +44,10 @@ app.get("/login", isLoggedIn, (req, res) => {
   res.render("login.ejs");
 });
 
+app.get("/register", (req, res) => {
+  res.render("register.ejs");
+});
+
 app.post(
   "/login",
   passport.authenticate("local", {
