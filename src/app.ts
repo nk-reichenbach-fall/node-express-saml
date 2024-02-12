@@ -40,22 +40,36 @@ app.get("/", (req, res) => {
   res.redirect("/login");
 });
 
+// Login Route
 app.get("/login", isLoggedIn, (req, res) => {
   res.render("login.ejs");
 });
 
+// Authenticate the user. Passport.authenticate calls the authUser fn provided in the LocalStrategy.
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
+  })
+);
+
+// Register Route
 app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
-app.post("/register", async (req, res) => {
-  console.log(req.body.email, req.body.password);
-  const addedUser = await UserTable.addUser(req.body.email, req.body.password);
-  res.redirect("/dashboard");
-});
-
+// Add user to db and call passport.auth fn
 app.post(
-  "/login",
+  "/register",
+  async (req, res, done) => {
+    await UserTable.addUser(
+      req.body.username,
+      req.body.name,
+      req.body.password
+    );
+    done();
+  },
   passport.authenticate("local", {
     successRedirect: "/dashboard",
     failureRedirect: "/login",
@@ -66,6 +80,7 @@ app.get("/dashboard", checkAuthenticated, (req: Request, res) => {
   res.render("dashboard.ejs", { name: req.user?.name });
 });
 
+// Logout - uses req.logOut by passport
 app.get("/logout", (req: Request, res, next: NextFunction) => {
   req.logOut((err) => {
     if (err) {

@@ -10,9 +10,7 @@ export const authUser = async (
 ) => {
   const userDetails = await UserTable.getUser(user);
 
-  if (userDetails.length && userDetails[0].password === password) {
-    console.log(userDetails);
-  } else {
+  if (!(userDetails.length && userDetails[0].password === password)) {
     return done(null, false);
   }
 

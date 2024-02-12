@@ -26,10 +26,10 @@ async function getUser(email: string) {
   ).rows;
 }
 
-async function addUser(email: string, password: string) {
+async function addUser(email: string, name: string, password: string) {
   return await Pg.execute(`
-    INSERT INTO users (email, password, created_by, created_at)
-    VALUES ('${email}','${password}','system','${new Date().toISOString()}');
+    INSERT INTO users (email, password, name, created_by, created_at)
+    VALUES ('${email}','${password}','${name}','system','${new Date().toISOString()}');
   `);
 }
 
