@@ -48,6 +48,12 @@ app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
+app.post("/register", async (req, res) => {
+  console.log(req.body.email, req.body.password);
+  const addedUser = await UserTable.addUser(req.body.email, req.body.password);
+  res.redirect("/dashboard");
+});
+
 app.post(
   "/login",
   passport.authenticate("local", {

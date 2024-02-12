@@ -8,16 +8,18 @@ export const authUser = async (
   password: string,
   done: Function
 ) => {
-  // TODO: Check the username and password against a DB.
   const userDetails = await UserTable.getUser(user);
 
-  if (userDetails.rows.length) {
+  if (userDetails.length && userDetails[0].password === password) {
     console.log(userDetails);
   } else {
     return done(null, false);
   }
 
-  const authenticatedUser = { id: 123, name: user };
+  const authenticatedUser = {
+    id: userDetails[0].id,
+    name: userDetails[0].name,
+  };
 
   return done(null, authenticatedUser);
 };
