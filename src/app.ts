@@ -76,6 +76,7 @@ app.post(
   })
 );
 
+// TODO: Move biz routes to router file
 app.get("/dashboard", checkAuthenticated, (req: Request, res) => {
   res.render("dashboard.ejs", { name: req.user?.name });
 });
