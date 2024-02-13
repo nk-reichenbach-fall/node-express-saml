@@ -1,6 +1,7 @@
 // Create User table
 
 import Pg from "../libs/postgres";
+import bcrypt from "bcrypt";
 
 async function createUserTable() {
   return await Pg.execute(`
@@ -27,9 +28,12 @@ async function getUser(email: string) {
 }
 
 async function addUser(email: string, name: string, password: string) {
+  const saltRounds = 10;
+  const hashedPassword = bcrypt.hashSync(password, saltRounds);
+
   return await Pg.execute(`
     INSERT INTO users (email, password, name, created_by, created_at)
-    VALUES ('${email}','${password}','${name}','system','${new Date().toISOString()}');
+    VALUES ('${email}','${hashedPassword}','${name}','system','${new Date().toISOString()}');
   `);
 }
 

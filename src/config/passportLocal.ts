@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
+import brcypt from "bcrypt";
 import UserTable from "../db/user";
 
 // Middleware to authenticate user against db and return authenticatedUser to serializeUser function
@@ -10,7 +11,12 @@ export const authUser = async (
 ) => {
   const userDetails = await UserTable.getUser(user);
 
-  if (!(userDetails.length && userDetails[0].password === password)) {
+  if (
+    !(
+      userDetails.length &&
+      brcypt.compareSync(password, userDetails[0].password)
+    )
+  ) {
     return done(null, false);
   }
 
